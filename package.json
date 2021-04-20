@@ -1,0 +1,25 @@
+{
+  "name": "xml-learn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prett": "prettier -w ./**/*.ts",
+    "prettCheck": "prettier --check ./**/*.ts",
+    "start:index": "ts-node-dev --respawn index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^14.14.39",
+    "@types/node-expat": "^2.3.1",
+    "@types/xml2js": "^0.4.8",
+    "prettier": "^2.2.1",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "node-expat": "^2.4.0",
+    "xml2js": "^0.4.23"
+  }
+}
