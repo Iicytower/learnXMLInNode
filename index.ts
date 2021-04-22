@@ -1,40 +1,60 @@
 import fs from 'fs';
 import { ReadStream, WriteStream } from 'node:fs';
-import { Parser } from 'node-expat';
-import { parseString } from 'xml2js';
-const parser: Parser = new Parser('UTF-8');
+import sax, { SAXParser, SAXStream } from 'sax';
+import { JSDOM } from 'jsdom';
+const strict: boolean = false;
+const parser: sax.SAXParser = sax.parser(strict);
 
-const feedXMLReadStream: ReadStream = fs.createReadStream('./Test xml/feed_sample.xml', {
-  encoding: 'utf-8',
-});
+const now = new Date();
 
-// const feedOutXMLWriteStream: WriteStream = fs.createWriteStream('feed_out.xml', {
-//   encoding: 'utf-8',
-// })
+try {
+  const feedXMLReadStream: fs.ReadStream = fs.createReadStream(
+    './Test xml/feed_sample.xml',
+    {
+      encoding: 'utf-8',
+    },
+  );
 
-feedXMLReadStream.addListener('data', (data) => {
-  parser.on('startElement', function (name, attrs) {
-    if (name === 'offer') {
+  const feedOutXMLWriteStream: fs.WriteStream = fs.createWriteStream('./feed_out.xml', {
+    encoding: 'utf-8',
+  });
 
-      console.log('name, att', name, attrs);
+  var saxStream: sax.SAXStream = sax.createStream(strict, { lowercase: true, });
 
-      parser.on('text', function (text) {
-        console.log('text', text);
-      });
+  saxStream.on('error', function (e) {
+    // unhandled errors will throw, since this is a proper node
+    // event emitter.
+    console.error('saxStream error!', e);
+    // clear the error
+    parser.resume();
+  });
 
+  console.log(saxStream);
+  saxStream.on('opentag', function (node) {
+    // same object as above
+    if (node.name === 'offer') {
+
+      console.log(node);
     }
   });
 
-  // if open now should be add true
-  parser.on('endElement', function (name) {
-    // console.log(name)
+  saxStream.on('doctype', function (text) {
+    // same object as above
+    console.log(text);
   });
 
-  parser.on('error', function (error) {
-    // console.error(error)
+  saxStream.on('closetag', function (tag) {
+    // same object as above
+    if (tag === 'offer') console.log('=================', tag);
   });
 
-  parser.write(data);
-});
+  saxStream.on('end', () => {
+    console.log('done with saxStream');
+  });
 
-console.log('------------------------------');
+  feedXMLReadStream.pipe(saxStream).pipe(feedOutXMLWriteStream);
+
+  console.log('------------------------------');
+} catch (err) {
+  console.error('Error: \n', err);
+}
