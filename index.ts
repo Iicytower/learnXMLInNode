@@ -31,7 +31,7 @@ try {
     encoding: 'utf-8',
   });
 
-  var saxStream: sax.SAXStream = sax.createStream(strict, {
+  const saxStream: sax.SAXStream = sax.createStream(strict, {
     lowercase: true,
     position: true,
   });

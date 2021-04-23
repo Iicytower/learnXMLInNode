@@ -6,28 +6,18 @@
   "scripts": {
     "prett": "prettier -w ./**/*.ts",
     "prettCheck": "prettier --check ./**/*.ts",
-    "start:index": "ts-node-dev --respawn index.ts",
-    "start:xs": "ts-node-dev --respawn xs.ts"
+    "start:index": "ts-node-dev --respawn index.ts"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/jsdom": "^16.2.10",
     "@types/node": "^14.14.39",
-    "@types/node-expat": "^2.3.1",
     "@types/sax": "^1.2.1",
-    "@types/sax-stream": "^1.3.0",
     "prettier": "^2.2.1",
     "ts-node-dev": "^1.1.6",
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "jsdom": "^16.5.3",
-    "node-expat": "^2.4.0",
-    "node-xml-stream-parser": "^1.0.12",
-    "sax": "^1.2.4",
-    "sax-stream": "^1.3.0",
-    "xml-stream": "^0.4.5",
-    "xml-stream-sax": "^0.4.6"
+    "sax": "^1.2.4"
   }
 }
