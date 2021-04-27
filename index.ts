@@ -96,7 +96,7 @@ try {
         return acc;
       }, true);
       addTagValue = result;
-      return; // TODO add tag now
+      return;
     }
   });
 
