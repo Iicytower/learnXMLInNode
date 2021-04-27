@@ -24,7 +24,7 @@ const nowUTC: NowUTC = {
 
 try {
   const feedXMLReadStream: fs.ReadStream = fs.createReadStream(
-    './TestXML/feed_sample.xml',
+    './TestXML/feed.xml',
     {
       encoding: 'utf-8',
     },
