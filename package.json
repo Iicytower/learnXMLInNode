@@ -4,23 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prett": "prettier -w ./**/*.ts",
-    "prettCheck": "prettier --check ./**/*.ts",
-    "start:index": "ts-node-dev --respawn index.ts",
-    "start:test": "nodemon test.js"
+    "formater": "prettier -w ./**/*.ts",
+    "formaterCheck": "prettier --check ./**/*.ts",
+    "start": "ts-node-dev --respawn index.ts"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^14.14.39",
     "@types/sax": "^1.2.1",
-    "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
     "ts-node-dev": "^1.1.6",
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "sax": "^1.2.4",
-    "walkdir": "^0.4.1"
+    "sax": "^1.2.4"
   }
 }
