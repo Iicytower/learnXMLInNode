@@ -4,7 +4,6 @@ export interface Item {
 }
 
 export type DayKeys = 1 | 2 | 3 | 4 | 5 | 6 | 7;
-// type DayKeys = '1' | '2' | '3' | '4' | '5' | '6' | '7';
 
 export type OpeningTimes = {
   [key in DayKeys]: Item[];
@@ -19,6 +18,11 @@ export interface NowUTC {
   year: number;
   hour: number;
   minutes: number;
+}
+
+export interface Count {
+  opened: number;
+  closed: number;
 }
 
 export enum Events {

@@ -104,7 +104,8 @@ dist
 .tern-port
 
 # other
-Test xml/
+TestXML/
 .history/
+.vscode/
 feed_out.xml
 feed_out_sample.xml

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import sax from 'sax';
-import { OpeningTimes, NowUTC, Item, DayKeys, Events } from './models';
+import { OpeningTimes, NowUTC, Item, DayKeys, Events, Count } from './models';
 const strict: boolean = false;
 const parser: sax.SAXParser = sax.parser(strict);
 
@@ -8,16 +8,13 @@ const date: Date = new Date();
 let flagOpeningTimes: boolean = false;
 let addTagValue: boolean;
 let nodeOffer: string = '';
-const count: {
-  opened: number,
-  closed: number, 
-} = {
+const count: Count = {
   opened: 0,
   closed: 0,
 };
 
 const nowUTC: NowUTC = {
-  weekDay: date.getUTCDay() === 0 ? 7 : date.getUTCDay() as DayKeys,
+  weekDay: date.getUTCDay() === 0 ? 7 : (date.getUTCDay() as DayKeys),
   day: date.getUTCDate(),
   month: date.getUTCMonth(),
   year: date.getUTCFullYear(),
@@ -27,7 +24,7 @@ const nowUTC: NowUTC = {
 
 try {
   const feedXMLReadStream: fs.ReadStream = fs.createReadStream(
-    './Test xml/feed_sample.xml',
+    './TestXML/feed_sample.xml',
     {
       encoding: 'utf-8',
     },
@@ -39,33 +36,31 @@ try {
 
   const saxStream: sax.SAXStream = sax.createStream(strict, {
     lowercase: true,
-    position: true,
   });
 
-  saxStream.on('error', (e) => {
-    console.error('saxStream error!', e);
+  saxStream.on(Events.error, (err: Error): void => {
+    console.error('saxStream error!', err);
     parser.resume();
   });
 
-  saxStream.on('processinginstruction', (instructions): void => {
+  saxStream.on(Events.processinginstruction, (instructions): void => {
     feedOutXMLWriteStream.write(
       `<?${instructions.name} ${instructions.body} ?>`,
       'utf-8',
     );
   });
 
-  saxStream.on('text', (text): void => {
+  saxStream.on(Events.text, (text: string): void => {
     nodeOffer += text;
   });
 
-  saxStream.on('opentag', (node): void => {
+  saxStream.on(Events.opentag, (node: sax.Tag | sax.QualifiedTag): void => {
     nodeOffer += `<${node.name}>`;
-
 
     if (node.name === 'opening_times') flagOpeningTimes = true;
   });
 
-  saxStream.on('cdata', (cdata): void => {
+  saxStream.on(Events.cdata, (cdata: string): void => {
     nodeOffer += `<![CDATA[${cdata}]]>`;
 
     if (flagOpeningTimes) {
@@ -93,21 +88,21 @@ try {
           `${nowUTC.year}.${nowUTC.month}.${nowUTC.day} ${nowUTC.hour}:${nowUTC.minutes}`,
         );
 
-        return (opening <= now && now <= closing);
+        return opening <= now && now <= closing;
       });
-      
+
       addTagValue = result;
       return;
     }
   });
 
-  saxStream.on('closetag', (tag): void => {
+  saxStream.on(Events.closetag, (tag: string): void => {
     nodeOffer += `</${tag}>`;
 
     if (tag === 'opening_times') {
       const newTag: string = `\n\t<is_active><![CDATA[${addTagValue}]]></is_active>`;
-      if(addTagValue) count.opened++;
-      if(!addTagValue) count.closed++;
+      if (addTagValue) count.opened++;
+      if (!addTagValue) count.closed++;
 
       nodeOffer += newTag;
 
@@ -118,15 +113,13 @@ try {
     nodeOffer = '';
   });
 
-  saxStream.on('end', (): void => {
-
-    console.log(`There is ${count.opened} opened and ${count.closed} closed.`)
+  saxStream.on(Events.end, (): void => {
+    console.log(`There is ${count.opened} opened and ${count.closed} closed.`);
     console.log('done with saxStream');
     parser.close();
   });
 
   feedXMLReadStream.pipe(saxStream);
-
 } catch (err) {
   console.error('Error: \n', err);
 }

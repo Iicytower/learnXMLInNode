@@ -1,0 +1,1 @@
+The xml file should be in the ./TestXML folder and be named feed.xml.
