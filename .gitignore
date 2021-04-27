@@ -107,3 +107,4 @@ dist
 Test xml/
 .history/
 feed_out.xml
+feed_out_sample.xml
