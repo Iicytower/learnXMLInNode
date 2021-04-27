@@ -34,3 +34,8 @@ export enum Events {
   closetag = 'closetag',
   end = 'end',
 }
+
+export interface Instructions { 
+  name: string; 
+  body: string 
+}

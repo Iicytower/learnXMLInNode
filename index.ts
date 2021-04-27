@@ -1,6 +1,6 @@
 import fs from 'fs';
 import sax from 'sax';
-import { OpeningTimes, NowUTC, Item, DayKeys, Events, Count } from './models';
+import { OpeningTimes, NowUTC, Item, DayKeys, Events, Count, Instructions } from './models';
 const strict: boolean = false;
 const parser: sax.SAXParser = sax.parser(strict);
 
@@ -43,7 +43,7 @@ try {
     parser.resume();
   });
 
-  saxStream.on(Events.processinginstruction, (instructions): void => {
+  saxStream.on(Events.processinginstruction, (instructions: Instructions): void => {
     feedOutXMLWriteStream.write(
       `<?${instructions.name} ${instructions.body} ?>`,
       'utf-8',
